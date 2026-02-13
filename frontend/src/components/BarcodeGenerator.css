@@ -1,0 +1,83 @@
+.student-card {
+  border: 4px solid #1a1a1a;
+  padding: 35px;
+  margin: 25px 0;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  color: white;
+  border-radius: 20px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.student-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.student-card h2 {
+  margin: 0 0 15px 0;
+  font-size: 28px;
+  color: white;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.student-card h3 {
+  margin: 15px 0;
+  font-size: 24px;
+  color: white;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.student-card p {
+  margin: 10px 0;
+  font-size: 16px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.barcode-area {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.barcode-area p {
+  color: #2d3748;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.barcode-area svg {
+  max-width: 100%;
+  height: auto;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .student-card, .student-card * {
+    visibility: visible;
+  }
+  .student-card {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

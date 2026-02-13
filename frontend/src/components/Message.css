@@ -1,0 +1,32 @@
+.message {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  padding: 16px 24px;
+  border-radius: 12px;
+  animation: slideIn 0.4s ease;
+  z-index: 1000;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.message.success {
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  color: white;
+}
+
+.message.error {
+  background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+  color: white;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

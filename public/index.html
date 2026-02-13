@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Token Payment System</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <div class="container">
+    <h1>🎓 Campus Token Payment</h1>
+    
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('student')">Student Portal</button>
+      <button class="tab" onclick="showTab('shop')">Shop Portal</button>
+      <button class="tab" onclick="showTab('admin')">Admin Panel</button>
+      <button class="tab" onclick="showTab('barcode')">Generate Barcode</button>
+    </div>
+
+    <!-- Student Portal -->
+    <div id="student-tab" class="tab-content active">
+      <h2>Student Portal</h2>
+      <div class="card">
+        <input type="text" id="student-uid" placeholder="Enter your UID (barcode)">
+        <button onclick="startStudentScanner()">📷 Scan Barcode/QR Code</button>
+        <button onclick="checkBalance()">Check Balance</button>
+        <div id="student-scanner" style="display:none; margin-top:15px;">
+          <p class="scan-tip">
+            <strong>💡 Scanning Tips:</strong> Hold barcode/QR code steady in front of camera. Ensure good lighting. QR codes scan easier than barcodes.
+          </p>
+          <div id="student-reader" style="width:100%;"></div>
+          <button onclick="stopStudentScanner()" style="background:linear-gradient(135deg, #f56565 0%, #e53e3e 100%); margin-top:10px;">Stop Scanner</button>
+        </div>
+      </div>
+      
+      <div id="student-info" class="info-box" style="display:none;">
+        <h3>Account Details</h3>
+        <p><strong>Name:</strong> <span id="s-name"></span></p>
+        <p><strong>Balance:</strong> ₹<span id="s-balance"></span></p>
+        <p><strong>Daily Limit:</strong> ₹<span id="s-limit"></span></p>
+        <p><strong>Spent Today:</strong> ₹<span id="s-spent"></span></p>
+        <p><strong>Status:</strong> <span id="s-status"></span></p>
+        
+        <h3>Recent Transactions</h3>
+        <div id="transactions"></div>
+      </div>
+    </div>
+
+    <!-- Shop Portal -->
+    <div id="shop-tab" class="tab-content">
+      <h2>Shop Portal</h2>
+      <div class="card">
+        <input type="text" id="shop-name" placeholder="Shop Name (e.g., Canteen)">
+        <input type="text" id="scan-uid" placeholder="Scan Student UID">
+        <button onclick="startShopScanner()">📷 Scan Barcode/QR Code</button>
+        <div id="shop-scanner" style="display:none; margin-top:15px;">
+          <p class="scan-tip">
+            <strong>💡 Scanning Tips:</strong> Hold barcode/QR code steady in front of camera. Ensure good lighting. QR codes scan easier than barcodes.
+          </p>
+          <div id="shop-reader" style="width:100%;"></div>
+          <button onclick="stopShopScanner()" style="background:linear-gradient(135deg, #f56565 0%, #e53e3e 100%); margin-top:10px;">Stop Scanner</button>
+        </div>
+        <input type="number" id="amount" placeholder="Amount (₹)">
+        <button onclick="processPayment()">Process Payment</button>
+      </div>
+      
+      <div id="payment-result" class="info-box" style="display:none;"></div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="admin-tab" class="tab-content">
+      <h2>Admin Panel</h2>
+      
+      <div class="card">
+        <h3>➕ Add/Update Student</h3>
+        <input type="text" id="admin-uid" placeholder="Student UID">
+        <input type="text" id="admin-name" placeholder="Student Name">
+        <input type="number" id="admin-balance" placeholder="Initial Balance">
+        <input type="number" id="admin-limit" placeholder="Daily Limit (default: 500)">
+        <button onclick="addStudent()">Add Student</button>
+      </div>
+
+      <div class="card">
+        <h3>🔄 Recharge Account</h3>
+        <input type="text" id="recharge-uid" placeholder="Student UID">
+        <input type="number" id="recharge-amount" placeholder="Amount to Add">
+        <button onclick="rechargeAccount()">Recharge</button>
+      </div>
+
+      <div class="card">
+        <h3>❄️ Freeze/Unfreeze Account</h3>
+        <input type="text" id="freeze-uid" placeholder="Student UID">
+        <button onclick="freezeAccount(true)" style="background:linear-gradient(135deg, #f56565 0%, #e53e3e 100%);">❄️ Freeze Account</button>
+        <button onclick="freezeAccount(false)" style="background:linear-gradient(135deg, #48bb78 0%, #38a169 100%);">✓ Unfreeze Account</button>
+      </div>
+
+      <div class="card">
+        <h3>💰 Update Daily Limit</h3>
+        <input type="text" id="limit-uid" placeholder="Student UID">
+        <input type="number" id="new-limit" placeholder="New Daily Limit">
+        <button onclick="updateLimit()">Update Limit</button>
+      </div>
+    </div>
+
+    <!-- Barcode Generator Tab -->
+    <div id="barcode-tab" class="tab-content">
+      <h2>Generate Student Barcode</h2>
+      
+      <div class="card">
+        <h3>🎫 Create ID Card</h3>
+        <input type="text" id="barcode-uid" placeholder="Enter Student UID (e.g., STU001)" value="STU001">
+        <input type="text" id="barcode-name" placeholder="Enter Student Name" value="Test Student">
+        <button onclick="generateBarcode()">Generate ID Card</button>
+        <button onclick="printCard()" style="background:linear-gradient(135deg, #48bb78 0%, #38a169 100%);">🖨️ Print ID Card</button>
+      </div>
+
+      <div id="card-preview" style="display:none;">
+        <div class="student-card">
+          <h2>🏫 College ID Card</h2>
+          <h3 id="display-name">Student Name</h3>
+          <p><strong>UID:</strong> <span id="display-uid"></span></p>
+          
+          <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
+            <div class="barcode-area" style="flex:1; min-width:200px;">
+              <p style="color:#333; font-weight:bold; margin-bottom:10px;">Barcode</p>
+              <svg id="barcode"></svg>
+            </div>
+            <div class="barcode-area" style="flex:1; min-width:150px;">
+              <p style="color:#333; font-weight:bold; margin-bottom:10px;">QR Code</p>
+              <div id="qrcode" style="display:flex; justify-content:center;"></div>
+            </div>
+          </div>
+          
+          <p style="font-size:12px; margin-top:10px; color:#fff;">Scan barcode or QR code for payments</p>
+        </div>
+        
+        <div class="info-box" style="margin-top:20px;">
+          <h3>Instructions</h3>
+          <p>✓ Print this card or scan directly from screen</p>
+          <p>✓ Use the barcode in Student/Shop portals</p>
+          <p>✓ Click "Scan Barcode" button to use camera</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="message" class="message"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

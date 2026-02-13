@@ -1,0 +1,24 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #1a1a1a;
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="1200" height="800" fill="%231a1a1a"/><rect width="1200" height="800" fill="url(%23grid)"/><circle cx="200" cy="150" r="100" fill="rgba(255,255,255,0.02)"/><circle cx="1000" cy="600" r="150" fill="rgba(255,255,255,0.02)"/><path d="M 100 400 Q 300 350 500 400 T 900 400" stroke="rgba(255,255,255,0.03)" stroke-width="2" fill="none"/><rect x="50" y="50" width="80" height="100" fill="rgba(255,255,255,0.02)" rx="5"/><rect x="1050" y="650" width="100" height="80" fill="rgba(255,255,255,0.02)" rx="5"/><polygon points="600,100 650,150 600,200 550,150" fill="rgba(255,255,255,0.02)"/></svg>');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  padding: 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
